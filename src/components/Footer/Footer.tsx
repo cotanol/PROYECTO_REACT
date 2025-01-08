@@ -10,10 +10,10 @@ export default function Footer() {
           From women to men.
         </p>
         <div className="flex gap-4">
-          <img src="./public/twitter-logo.png" />
-          <img src="./public/facebook-logo.png" />
-          <img src="./public/instagram-logo.png" />
-          <img src="./public/github-logo.png" />
+          <img src="/twitter-logo.png" />
+          <img src="/facebook-logo.png" />
+          <img src="/instagram-logo.png" />
+          <img src="./github-logo.png" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 ">
           <div>
