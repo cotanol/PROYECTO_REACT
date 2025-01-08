@@ -22,7 +22,14 @@ function App() {
           <NavBar />
           <div className="bg-[#F2F0F1]">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/products/:id_producto"
                 element={
