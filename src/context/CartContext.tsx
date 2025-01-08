@@ -63,6 +63,10 @@ export const ShoppingCartProvider = ({
   const [botonPresionado, setBotonPresionado] = useState(false);
 
   useEffect(() => {
+    getCarritoImages();
+  }, []);
+
+  useEffect(() => {
     const contanding = cartProducts.reduce(
       (acc, item) => acc + item.cantidad,
       0

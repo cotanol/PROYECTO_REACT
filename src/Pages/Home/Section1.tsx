@@ -42,16 +42,16 @@ const Section1 = () => {
 
         <img
           className="object-cover md:w-1/2 object-top max-h-[45rem]"
-          src="./hero-imagen.webp"
+          src="/hero-imagen.webp"
         />
       </div>
       <div className="bg-black">
         <div className="md:px-10 md:py-8 container mx-auto flex py-4 flex-wrap justify-center md:justify-between items-center gap-4">
-          <img className="md:w-[12%]" src="./versace-logo.svg" />
-          <img className="md:w-[12%]" src="./gucci-logo.svg" />
-          <img className="md:w-[8%]" src="./zara-logo.svg" />
-          <img className="md:w-[12%]" src="./prada-logo.svg" />
-          <img className="md:w-[12%]" src="./calvinklein-logo.svg" />
+          <img className="md:w-[12%]" src="/versace-logo.svg" />
+          <img className="md:w-[12%]" src="/gucci-logo.svg" />
+          <img className="md:w-[8%]" src="/zara-logo.svg" />
+          <img className="md:w-[12%]" src="/prada-logo.svg" />
+          <img className="md:w-[12%]" src="/calvinklein-logo.svg" />
         </div>
       </div>
     </>
