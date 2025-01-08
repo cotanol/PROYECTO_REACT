@@ -50,11 +50,11 @@ export default function Footer() {
             © 2000-2023 SHOP.CO. All Rights Reserved
           </p>
           <div className="flex justify-center">
-            <img src="./public/visa-logo.png" />
-            <img src="./public/mastercard-logo.png" />
-            <img src="./public/paypal-logo.png" />
-            <img src="./public/applepay-logo.png" />
-            <img src="./public/googlepay-logo.png" />
+            <img src="/visa-logo.png" />
+            <img src="/mastercard-logo.png" />
+            <img src="/paypal-logo.png" />
+            <img src="/applepay-logo.png" />
+            <img src="/googlepay-logo.png" />
           </div>
         </div>
       </div>
