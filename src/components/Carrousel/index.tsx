@@ -1,83 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { useProductos } from '../../hooks/useProductos';
+import React, { useEffect } from "react";
+import { useProductos } from "../../hooks/useProductos";
 import Loading from "../Loading/Loading";
-import imagenDefecto from "../../assets/ProductNotAvalible.webp";
-import { useImagenesProducto } from "../../hooks/useImagenProductos";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import ProductCard from "../ProductCard";
 
 const Carrousel: React.FC = () => {
-  
-  const { productos, loading, error, getProductos } = useProductos();
-  const {imagenesProducto, getImagenesProducto} = useImagenesProducto();
+  const { productos, loading, error, getProductosImages } = useProductos();
 
   useEffect(() => {
-    getProductos();
-    getImagenesProducto();
+    getProductosImages();
   }, []);
-  // Solo 5 primeros
-  const limitedData = productos?.slice(0, 5) || [];
-  // Duplicamos para simular loop
-  const displayedData = [...limitedData, ...limitedData];
-
-  const [current, setCurrent] = useState<number>(0);
-  const [isTransition, setIsTransition] = useState<boolean>(true);
-
-  // Avanzar automáticamente cada 3s
-  useEffect(() => {
-    if (limitedData.length) {
-      const intervalId = setInterval(() => {
-        setCurrent((prev) => {
-          // Si llegamos al final, saltamos a 0 sin transición
-          if (prev === displayedData.length - 1) {
-            setIsTransition(false);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 3000);
-      return () => clearInterval(intervalId);
-    }
-  }, [limitedData, displayedData]);
-
-  // Restaurar transición justo después del salto
-  useEffect(() => {
-    if (!isTransition) {
-      // Eliminamos el delay para que se note menos el “parpadeo”
-      const timeoutId = setTimeout(() => setIsTransition(true), 0);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isTransition]);
-
-  const obtenerImagen = (id: string) => {
-      return imagenesProducto.find(imagen => imagen.id_producto === id)?.imagen_producto;
-  };
 
   if (loading) return <Loading />;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="overflow-hidden w-full max-w-xl relative mt-4 font-body">
-      <div
-        className={`flex ${isTransition ? "transition-transform duration-500 ease-in-out" : ""}`}
-        style={{ transform: `translateX(-${current * 100}%)` }}
+    <div className="flex justify-center items-center mx-auto container px-4">
+      <Swiper
+        modules={[Navigation]}
+        navigation
+        loop={false}
+        spaceBetween={2.5}
+        slidesPerView={1}
+        breakpoints={{
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 1.25,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 1.5,
+          },
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 2.5,
+          },
+        }}
+        className="my-5 w-full"
       >
-        {displayedData.map((product, index) => (
-          <div
-            key={index}
-            className="flex-shrink-0 w-full flex flex-col gap-3 items-center text-center"
-          >
-            <img
-              className="w-72 h-72 object-cover rounded-2xl"
-              src={obtenerImagen(product.id_producto) || imagenDefecto}
-              onError={(e) => (e.currentTarget.src = imagenDefecto)}
-              alt="producto"
-            />
-            <h3 className="font-bold text-base px-2 w-60 truncate">
-              {product.nombre_producto}
-            </h3>
-            <p className="font-bold text-xl">${product.precio}</p>
-          </div>
+        {productos.map((caja) => (
+          <SwiperSlide className="flex justify-center" key={caja.id_producto}>
+            <ProductCard {...caja} />
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 };

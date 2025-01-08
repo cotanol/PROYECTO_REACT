@@ -1,20 +1,20 @@
-import { useContext } from "react";
 import { BsCart4 } from "react-icons/bs";
-import { ShoppingCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
+import { useShoppingCart } from "../../context/CartContext";
 
 const IconoCarro = () => {
+  const { count } = useShoppingCart();
 
-    const context = useContext(ShoppingCartContext);
-
-    return (
-        <div className="relative flex items-center">
-            <Link to="/"><BsCart4 className="text-white text-2xl"/></Link>
-            <p className="absolute top-[-5px] right-[-5px] bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{context.count}</p>
-        </div>
-        
-    )
-
-}
+  return (
+    <div className="relative flex items-center">
+      <Link to="/cartPage">
+        <BsCart4 className="text-white text-2xl" />
+      </Link>
+      <p className="absolute top-[-5px] right-[-5px] bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+        {count}
+      </p>
+    </div>
+  );
+};
 
 export default IconoCarro;

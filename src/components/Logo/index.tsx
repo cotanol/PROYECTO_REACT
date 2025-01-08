@@ -3,7 +3,7 @@ const Logo = () => {
 
 
     return (
-        <Link to="/" className="flex items-center logo font-heading text-3xl">
+        <Link to="/" className="flex items-center logo font-heading text-3xl xl:text-4xl">
             SHOP.CO
         </Link>
     );

@@ -12,7 +12,7 @@ const Button = ({label = "Submit", handleClick, botonColor = botonDefecto, type 
     return (
         <button
             onClick={handleClick}
-            className={`font-body text-base font-medium py-3 px-8 rounded-full transition duration-300 w-full border-2 ${botonColor}`} 
+            className={` font-body text-base font-medium py-3 px-8 rounded-full transition duration-300 w-full border-2 ${botonColor}`} 
             type={type}
         >
             {label}

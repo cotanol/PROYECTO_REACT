@@ -29,8 +29,8 @@ const NavBar = () => {
 
     return (
 
-        <header className="px-1 bg-black text-white">
-            <nav className="flex items-center justify-between px-4 py-3">
+        <header className="bg-black text-white ">
+            <nav className="container mx-auto flex items-center xl:h-24 justify-between px-4 md:px-10 py-3">
                 
                 {
                     user &&
@@ -43,7 +43,7 @@ const NavBar = () => {
                 }
                 
                 <Logo />
-
+                
                 {
                     user &&
                     <>
@@ -54,14 +54,17 @@ const NavBar = () => {
                                 <Nav key={nav.id_categoria} {...nav}  />
                             ))}
                         </ul>
-                        <IconoCarro/>
+                        
                     </>
                     
                 }
 
-                
+                <div className="flex flex-row gap-5">
+                <IconoCarro/>
                 
                 {user ? <IconoLogout/> : <IconoLogin/> }
+                </div>
+                
 
             </nav>
         </header>

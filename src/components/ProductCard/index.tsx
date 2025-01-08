@@ -1,62 +1,117 @@
-import { useContext, useEffect } from "react";
-import { Producto } from '../../types/product';    
+import { useState } from "react";
+import { ProductoConImagenes } from "../../types/product";
 import { Link } from "react-router-dom";
-import { ShoppingCartContext } from "../../context/CartContext";
-import imagenDefecto from "../../assets/ProductNotAvalible.webp";
+import { useShoppingCart } from "../../context/CartContext";
 import Button from "../Button";
-import { useProductos } from "../../hooks/useProductos";
-import { useImagenesProducto } from "../../hooks/useImagenProductos";
+import { useAuth } from "../../context/AuthContext";
 
+function ProductCard({
+  id_producto,
+  nombre_producto,
+  precio,
+  imagen_productos,
+}: ProductoConImagenes) {
+  const [countCard, setCountCard] = useState(0);
+  const { setCount, agregarAlCarrito, actualizarCarrito, cartProducts } =
+    useShoppingCart();
+  const { user } = useAuth();
 
-function ProductCard({id_producto, nombre_producto, precio}: Producto) {
+  const increment = () => {
+    const max = 7;
+    if (countCard < max) setCountCard(countCard + 1);
+    else alert(`No puedes agregar más de ${max} productos`);
+  };
 
-    const context = useContext(ShoppingCartContext);
+  const decrement = () => {
+    const min = 0;
+    if (countCard > min) setCountCard(countCard - 1);
+    else alert("No puedes agregar menos de 0 productos");
+  };
 
-    const {producto, obtenerProducto} = useProductos();
-    const {imagenesProducto, getImagenesProducto} = useImagenesProducto();
-
-    useEffect(() => {
-        const probando =  () => {
-            getImagenesProducto();
-            if (id_producto) obtenerProducto(id_producto);
-            console.log(producto);
-            
-        }
-        probando();
-    },[]);
-
-    const handleClickButton = () => {
-        context.setCount(context.count + 1);
+  const handleClickButton = () => {
+    if (!user?.id) {
+      alert("Debes iniciar sesión para agregar productos al carrito.");
+      return;
     }
 
-    const obtenerImagen = (id: string) => {
-        return imagenesProducto.find(imagen => imagen.id_producto === id)?.imagen_producto;
-    };
-
-    return (
-
-        <div className=" p-4 rounded-lg  mb-10 text-center">
-            <div className="product-image mb-4">
-                <img 
-                    src={obtenerImagen(id_producto)} 
-                    alt="Imagen de Prueba" 
-                    className="rounded-xl w-full h-auto object-contain mx-auto"
-                    onError={(e) => {e.currentTarget.src = imagenDefecto}} //Funciona pero evaluar que sea public
-                />
-            </div>
-
-            <div className="product-info">
-                <h3 className="font-body font-bold text-black hover:text-gray-600 transition-colors duration-200">
-                    <Link to={`/products/${id_producto}`}>{nombre_producto}</Link>
-                </h3>
-                <p className="font-body font-bold text-black mt-2">${precio}</p>
-                <Button handleClick={handleClickButton} label="Buy Now" />
-            </div>
-
-        </div>
-
+    const existingProduct = cartProducts.find(
+      (cartProduct) =>
+        cartProduct.id_producto === id_producto &&
+        cartProduct.activo === true &&
+        cartProduct.id_usuario === user.id
     );
 
+    if (countCard === 0) {
+      alert("Debes agregar al menos un producto al carrito.");
+      return;
+    }
+
+    if (existingProduct) {
+      actualizarCarrito(
+        existingProduct.id_carrito,
+        existingProduct.cantidad + countCard,
+        true
+      );
+    } else {
+      agregarAlCarrito(user.id, id_producto, countCard);
+    }
+
+    setCount((prev) => prev + countCard);
+    setCountCard(0);
+  };
+
+  return (
+    <div className="rounded-lg shadow-lg bg-white w-[18.75rem] h-[32rem] p-4 flex flex-col text-center">
+      {/* Imagen del producto */}
+      <div className="w-full h-[50%] flex items-center justify-center overflow-hidden rounded-lg bg-gray-100">
+        {imagen_productos && imagen_productos.length > 0 ? (
+          <img
+            src={imagen_productos[0].imagen_producto}
+            alt={nombre_producto}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <span className="text-gray-400">No hay imagen disponible</span>
+          </div>
+        )}
+      </div>
+
+      {/* Información del producto */}
+      <div className="product-info mt-2 pt-4 flex flex-col items-center h-[25%]">
+        <h3 className="font-bold text-black text-base sm:text-lg">
+          <Link to={`/products/${id_producto}`} className="hover:text-gray-600">
+            {nombre_producto}
+          </Link>
+        </h3>
+        <p className="font-bold text-black text-lg mt-2">${precio}</p>
+      </div>
+
+      {/* Botón  y Contador*/}
+      <div className="h-[25%] flex flex-col justify-between">
+        <div className="flex flex-col items-center p-4rounded-lg w-64">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={decrement}
+              className="px-4 py-2 bg-black text-white font-bold rounded"
+            >
+              -
+            </button>
+            <span className="text-2xl font-semibold text-gray-700">
+              {countCard}
+            </span>
+            <button
+              onClick={increment}
+              className="px-4 py-2 bg-black text-white font-bold rounded"
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <Button handleClick={handleClickButton} label="Add to Cart" />
+      </div>
+    </div>
+  );
 }
 
 export default ProductCard;

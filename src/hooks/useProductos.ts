@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { supabase } from '../supabase/client';
-import { Producto } from '../types/product';
+import { ProductoConImagenes } from '../types/product';
 
 export const useProductos = () => {
     const [loading, setLoading] = useState(false);
-    const [producto, setProducto] = useState<Producto | null>(null);
-    const [productos, setProductos] = useState<Producto[]>([]);
+    const [producto, setProducto] = useState<ProductoConImagenes | null>(null);
+    const [productos, setProductos] = useState<ProductoConImagenes[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const getProductos = async () => {
@@ -18,6 +18,32 @@ export const useProductos = () => {
         } catch (error: any) {
             setError(error.message || "Ocurrió un error al obtener los productos");
             console.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const getProductosImages = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const { data, error } = await supabase
+                .from('productos')
+                .select(`
+                    *,
+                    imagen_productos (
+                        id_imagen_producto,
+                        imagen_producto
+                    )
+                `);
+
+            if (error) throw error;
+
+            setProductos(data || []);
+            console.log("Productos con imágenes:", data);
+        } catch (error: any) {
+            setError(error.message || "Ocurrió un error al obtener los productos");
+            console.error("Error al obtener productos:", error.message);
         } finally {
             setLoading(false);
         }
@@ -108,6 +134,31 @@ export const useProductos = () => {
         }
     };
 
+    const obtenerProductoConImagenes = async (id_producto: string) => {
+        setLoading(true);
+        setError(null);
+        try {
+            setProducto(null);
+            const { data, error } = await supabase
+                .from('productos')
+                .select(`
+                    *,
+                    imagen_productos (
+                        id_imagen_producto,
+                        imagen_producto
+                    )
+                `)
+                .match({ id_producto });
+
+            if (error) throw error;
+            if (data) setProducto(data[0]);
+        } catch (error: any) {
+            setError(error.message || "Error al obtener el producto");
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
     return {
         loading,
         error,
@@ -117,6 +168,8 @@ export const useProductos = () => {
         editarProducto,
         eliminarProducto,
         obtenerProducto,
-        producto
+        producto,
+        getProductosImages,
+        obtenerProductoConImagenes
     };
 };
