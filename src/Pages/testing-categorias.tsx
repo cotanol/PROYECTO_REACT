@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { useImagenesProducto } from "../hooks/useImagenProductos";
 import { useShoppingCart } from "../context/CartContext";
-import ContadorProductCard from "../components/ProductCard/contador";
 
 const PageCategories = () => {
-  const { imagenesProducto, loading, error, getImagenesProducto } =
-    useImagenesProducto();
+  const { loading, error } = useImagenesProducto();
   const { getCarritoImages } = useShoppingCart();
 
   useEffect(() => {
@@ -14,8 +12,6 @@ const PageCategories = () => {
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Ocurrió un error: {error}</p>;
-
-  return <ContadorProductCard />;
 };
 
 export default PageCategories;
