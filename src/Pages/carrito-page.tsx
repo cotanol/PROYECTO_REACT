@@ -1,12 +1,22 @@
 import Button from "../components/Button";
 import { MdDelete } from "react-icons/md";
 import { useShoppingCart } from "../context/CartContext";
+import { useEffect } from "react";
 
 const CarritoPage = () => {
-  const { cartProducts, eliminarDelCarrito } = useShoppingCart();
+  const {
+    cartProducts,
+    eliminarDelCarrito,
+    botonPresionado,
+    getCarritoImages,
+  } = useShoppingCart();
   const total = cartProducts.reduce((acc, item) => {
     return acc + item.cantidad * item.productos.precio;
   }, 0);
+  useEffect(() => {
+    getCarritoImages();
+    console.log("Carrito actualizado");
+  }, [botonPresionado]);
 
   return (
     <div className="container mx-auto px-4 md:px-10 py-8 font-body">

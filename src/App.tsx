@@ -25,17 +25,46 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route
                 path="/products/:id_producto"
-                element={<ProductDetailPage />}
+                element={
+                  <ProtectedRoute>
+                    <ProductDetailPage />
+                  </ProtectedRoute>
+                }
               />
               <Route
                 path="/categories/:id_categoria/products"
-                element={<CategoriesProductsPage />}
+                element={
+                  <ProtectedRoute>
+                    <CategoriesProductsPage />
+                  </ProtectedRoute>
+                }
               />
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/pageCat" element={<PageCategories />} />
-              <Route path="/pageProd" element={<ProductoPage />} />
-              <Route path="/cartPage" element={<CarritoPage />} />
+              <Route
+                path="/pageCat"
+                element={
+                  <ProtectedRoute>
+                    <PageCategories />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/pageProd"
+                element={
+                  <ProtectedRoute>
+                    <ProductoPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/cartPage"
+                element={
+                  <ProtectedRoute>
+                    <CarritoPage />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </div>
 

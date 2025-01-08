@@ -15,6 +15,8 @@ interface ShoppingCartContextType {
   setCartProducts: React.Dispatch<React.SetStateAction<CarritoConProducto[]>>;
   loading: boolean;
   error: string | null;
+  botonPresionado: boolean;
+  setBotonPresionado: React.Dispatch<React.SetStateAction<boolean>>;
   getCarrito: () => Promise<void>;
   agregarAlCarrito: (
     id_usuario: string,
@@ -58,10 +60,7 @@ export const ShoppingCartProvider = ({
   const [cartProducts, setCartProducts] = useState<CarritoConProducto[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    getCarritoImages();
-  }, []);
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   useEffect(() => {
     const contanding = cartProducts.reduce(
@@ -203,6 +202,8 @@ export const ShoppingCartProvider = ({
         actualizarCarrito,
         eliminarDelCarrito,
         getCarritoImages,
+        botonPresionado,
+        setBotonPresionado,
       }}
     >
       {children}

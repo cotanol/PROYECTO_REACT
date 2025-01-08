@@ -12,8 +12,14 @@ function ProductCard({
   imagen_productos,
 }: ProductoConImagenes) {
   const [countCard, setCountCard] = useState(0);
-  const { setCount, agregarAlCarrito, actualizarCarrito, cartProducts } =
-    useShoppingCart();
+  const {
+    setCount,
+    agregarAlCarrito,
+    actualizarCarrito,
+    cartProducts,
+    setBotonPresionado,
+    botonPresionado,
+  } = useShoppingCart();
   const { user } = useAuth();
 
   const increment = () => {
@@ -55,6 +61,8 @@ function ProductCard({
     } else {
       agregarAlCarrito(user.id, id_producto, countCard);
     }
+
+    setBotonPresionado(!botonPresionado);
 
     setCount((prev) => prev + countCard);
     setCountCard(0);
